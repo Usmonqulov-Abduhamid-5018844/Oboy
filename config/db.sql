@@ -1,0 +1,4 @@
+-- Active: 1724135574484@@127.0.0.1@3306@prayekt
+CREATE DATABASE Prayekt
+
+
