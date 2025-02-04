@@ -1,4 +1,6 @@
 
+use prayekt
+
 
 CREATE Table users (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
