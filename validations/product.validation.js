@@ -1,6 +1,6 @@
 import joi from "joi"
 
-const ProductValidation = await joi.object({
+const ProductValidation =  joi.object({
     name_UZ: joi.string().required(),
     user_RU: joi.string().required(),
     brand_id: joi.number().positive().required(),
@@ -14,7 +14,7 @@ const ProductValidation = await joi.object({
     size: joi.string().required()
 })
 
-const ProductPatchValidation = await joi.object({
+const ProductPatchValidation =  joi.object({
     name_UZ: joi.string(),
     user_RU: joi.string(),
     brand_id: joi.number().positive(),

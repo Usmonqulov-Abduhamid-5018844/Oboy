@@ -31,42 +31,35 @@ async function findOne(req, res) {
 
 async function create(req, res) {
     try {
-
         let {error, value} = OrderValidation.validate(req.body)
-
         if (error) {
             return res.status(401).json({error: error.details[0].message})
         }
+        let {user_id, totalPrice} = value
 
-        let {user_id, totalPrice} = req.body
-
-        console.log(user_id, totalPrice);
-        
+        console.log(user_id, totalPrice);    
         let [user] = await db.query("insert into orders(user_id, totalPrice) values (?, ?)", [user_id, totalPrice])
-    
-        res.send({data: "Created"})
-
+        if(user.affectedRows == 1){
+            res.json({data:"Created"})
+        }
+        else{
+            res.json({message: "Bazaga saqlashda xatolig"})
+        }
     } catch (error) {
         res.json({error: error.message})
     }
 }
-
 async function update(req, res) {
     try {
         let {id} = req.params
-
         let {error, value} = OrderPatchValidation.validate(req.body)
-
         if (error) {
             return res.status(401).json({error: error.details[0].message})
         }
-
         let keys = Object.keys(value)
         let values = Object.values(value)
         let queryKey = keys.map((k) => (k += " = ?"))
-
         let result = await db.query(`UPDATE orders SET ${queryKey.join(",")} where id = ?`, [...values, id])
-
         console.log(result);
         
         res.status(202).json({data: "Order updated"})
@@ -75,28 +68,18 @@ async function update(req, res) {
         res.json({error: error.message})
     }
 }
-
 async function remove(req, res) {
     try {
         let {id} = req.params
 
-        let [user] = await db.query("select * from orders where id = ?", [id])
-
-        
+        let [user] = await db.query("select * from orders where id = ?", [id])     
         if (!user.length) {
             return res.status(401).json({error: "User not found"})
         }
-
-
-        await db.query("delete from orders where id = ?", [id])
-        
-        res.status(202).json({data: "Order deleted"})
-
-
-        
+        await db.query("delete from orders where id = ?", [id])     
+        res.status(202).json({data: "Order deleted"})    
     } catch (error) {
         res.json({error: error.message})
     }
 }
-
 export {findAll, findOne, create, update, remove}

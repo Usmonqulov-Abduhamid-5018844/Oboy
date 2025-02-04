@@ -1,12 +1,13 @@
 import {create, findAll, findOne, remove, update} from "../controller/order.controller.js"
 import {Router} from "express"
+import authorizatsiy from "../middlewares/authorizatsiya.js";
 
-let route = Router()
+let route = Router();
 
 route.get("", findAll)
 route.get("/:id", findOne)
-route.post("", create)
-route.patch("/:id", update)
-route.delete("/:id", remove)
+route.post("",authorizatsiy(["admin"]), create)
+route.patch("/:id",authorizatsiy(["admin"]), update)
+route.delete("/:id",authorizatsiy(["admin"]), remove)
 
 export default route

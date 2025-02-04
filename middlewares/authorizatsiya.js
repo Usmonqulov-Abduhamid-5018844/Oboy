@@ -1,17 +1,22 @@
 import Jwt from "jsonwebtoken"
 
-const authorizatsiy = (req, res, nex)=>{
-    let Toket = req.header("Authorization");
-    if(!Toket){
+const authorizatsiy = (roles) => (req, res, next)=>{
+    let Token = req.header("Authorization");
+    if(!Token){
         return res.status(404).json({message: "Not found token"});
     }
     try{
-        let data = Jwt.verify(Toket, "Secret");
-        req.user = data
-        nex();
+        let data = Jwt.verify(Token, "Secret");
+        if(roles.includes(data.role)){  
+            req.user = data
+            next();
+        }
+        else{
+            res.json({message: "No authoraets"})
+        }
     }catch(e){
         res.status(401).json({message: e.message})
-        console.log(e);
+        console.log(e.message);
     }
 };
-export default authorizatsiy
+export default authorizatsiy;
