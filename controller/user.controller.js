@@ -40,7 +40,8 @@ async function register (req,res) {
         const [data] = await db.query("select * from users where phone = ?", items.phone);
 
         if(data.length){
-            return res.status(201).json({message: "User ro'yhaddan o'tgan"});
+            let OTP = totp.generate(`${items.phone}+ "Secret"`);
+            res.status(200).send({message: "sizning yangi tokeningiz", token:OTP})
         }
         let hash = bcrypt.hashSync(items.password, 10);
         items.password = hash;
@@ -67,7 +68,7 @@ async function verify (req,res) {
         if(!token){
             return res.status(401).json({message: "Not Found token"})
         }
-        let T = totp.check(token,`${phone}+ "Secret`)
+        let T = totp.check(token,`${phone} +"Secret"`)
         if(T){
             return res.status(401).json({message: "Wrong Token"})
         }

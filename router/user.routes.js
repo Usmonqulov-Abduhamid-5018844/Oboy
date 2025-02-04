@@ -4,10 +4,10 @@ import authorizatsiy from "../midellwaer/authorizatsiya.js";
 
 const userRoute = Router()
 
-userRoute.get("/all",authorizatsiy(["admin","superadmin"]), all);
+userRoute.get("/all", all);
 userRoute.post("/login", login);
 userRoute.post("/register", register);
-userRoute.post("/verify", verify);
+userRoute.post("/verify/:token/:phone", verify);
 
 
 export default userRoute
