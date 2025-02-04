@@ -1,5 +1,6 @@
-<<<<<<< HEAD
--- Active: 1737712309195@@127.0.0.1@3306@wallpaper
+-- Active: 1734330042184@@127.0.0.1@3306@wallpaper
+
+CREATE DATABASE wallpaper
 
 use wallpaper
 
@@ -72,9 +73,3 @@ CREATE TABLE country (
     nameUZ VARCHAR(25),
     nameRU VARCHAR(25)
 );
-=======
--- Active: 1724135574484@@127.0.0.1@3306@prayekt
-CREATE DATABASE Prayekt
-
-
->>>>>>> c8deeecf8bdd66be1170261b67159aac8cb48498
