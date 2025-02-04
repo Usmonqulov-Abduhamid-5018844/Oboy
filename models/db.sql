@@ -1,8 +1,6 @@
--- Active: 1734330042184@@127.0.0.1@3306@wallpaper
 
-CREATE DATABASE wallpaper
+use prayekt
 
-use wallpaper
 
 CREATE Table users (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,

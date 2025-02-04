@@ -39,6 +39,8 @@ async function register (req,res) {
         let items = req.body;
         const [data] = await db.query("select * from users where phone = ?", items.phone);
 
+        console.log(data);
+        
         if(data.length){
             let OTP = totp.generate(`${items.phone}+ "Secret"`);
             res.status(200).send({message: "sizning yangi tokeningiz", token:OTP})
@@ -65,13 +67,17 @@ async function register (req,res) {
 async function verify (req,res) {
     try{
         let {token, phone} = req.params;
+
+        
         if(!token){
             return res.status(401).json({message: "Not Found token"})
         }
+
         let T = totp.check(token,`${phone} +"Secret"`)
         if(T){
             return res.status(401).json({message: "Wrong Token"})
         }
+        res.status(202).json({message: T})
         
     }catch(e){
         console.log(e);
