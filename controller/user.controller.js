@@ -19,18 +19,20 @@ async function login (req,res) {
     try{
         let {phone, password} = req.body;
         const [data] = await db.query("select * from users where phone = ?", phone);
-
+        
+        
         if(!data.length){
             return res.status(401).json({message: "User not fount"});
         }
         let matchPassword = bcrypt.compareSync(password, data[0].password);
         if(!matchPassword){
-            return res.status(401).json({message: "Wrong password"})
-        };
-        let token = Jwt.sign({
-            id,
-            role,
-        },Secret)
+                return res.status(401).json({message: "Wrong password"})
+            };
+            let token = Jwt.sign({
+                id,
+                role,
+            },Secret)
+            // console.log(token);
 
         res.status(200).json({Token: token})
     }catch(e){
@@ -46,14 +48,13 @@ async function register (req,res) {
         };
         let {phone, password} = value;
         const [data] = await db.query("select * from users where phone = ?",phone);
-
         
         if(data.length){
             let OTP = totp.generate(`${phone}+${Secret}`);
             res.status(200).send({message: "sizning yangi tokeningiz", token:OTP})
             return;
         }
-        if(value.role =! "user" || value.role != "admin"){
+        if(!value.role == "user" || !value.role == "admin"){
             return res.json({message: "role faqat user yoki admin bo'lishi kerak"})
         }
         let hash = bcrypt.hashSync(password, 10);
@@ -79,14 +80,16 @@ async function verify (req,res) {
     try{
         let {token, phone} = req.params;
 
+        
         if(!token){
-            return res.status(401).json({message: "Not Found token"})
+            return res.status(401).json({message: "Not Found otp"})
         }
         let T = totp.check(token,`${phone}+${Secret}`)
+        console.log(T);
         if(!T){
-            return res.status(401).json({message: "Wrong Token"})
+            return res.status(401).json({message: "Wrong OTP"})
         }
-        res.status(200).json({message: "Token verify"})
+        res.status(200).json({message: "OTP verify"})
     }catch(e){
         console.log(e);
     }
