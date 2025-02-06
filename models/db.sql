@@ -1,5 +1,4 @@
-
-use prayekt
+-- Active: 1734330042184@@127.0.0.1@3306@wallpaper
 
 
 CREATE Table users (
@@ -16,6 +15,18 @@ CREATE Table orders (
     totalPrice INTEGER,
     Foreign Key (user_id) REFERENCES users (id)
 );
+
+
+SELECT 
+    orders.id AS order_id,
+    users.fullName AS name,
+    product.nameUZ AS product_name,
+    orderItem.count,
+    orderItem.total
+FROM orders
+JOIN users ON orders.user_id = users.id
+JOIN orderItem ON orders.id = orderItem.order_id
+JOIN product ON orderItem.product_id = product.id;
 
 CREATE Table orderItem (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,

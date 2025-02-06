@@ -1,5 +1,4 @@
 import db from '../config/db.js';
-import path from 'path';
 import { brandPatchValidation, brandValidation } from '../validations/brand.validation.js';
 
 

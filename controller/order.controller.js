@@ -3,7 +3,16 @@ import {OrderPatchValidation, OrderValidation, } from "../validations/order.vali
 
 async function findAll(req, res) {
     try {
-        let [order] = await db.query("select * from orders")
+        let [order] = await db.query(`SELECT 
+        orders.id AS order_id,
+        users.fullName AS name,
+        product.nameUZ AS product_name,
+        orderItem.count,
+        orderItem.total
+    FROM orders
+    JOIN users ON orders.user_id = users.id
+    JOIN orderItem ON orders.id = orderItem.order_id
+    JOIN product ON orderItem.product_id = product.id;`)
 
         res.status(202).json({order})
         

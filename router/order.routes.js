@@ -1,6 +1,6 @@
 import {create, findAll, findOne, remove, update} from "../controller/order.controller.js"
 import {Router} from "express"
-import authorizatsiy from "../middlewares/authorizatsiya.js";
+import {autentifikatsiya} from "../middlewares/autentifikatsiya.js";
 
 let route = Router();
 
@@ -76,7 +76,7 @@ route.get("/:id", findOne);
  *       400:
  *         description: Invalid request data
  */
-route.post("",authorizatsiy(["admin"]), create);
+route.post("", create);
 
 /**
  * @swagger
@@ -102,7 +102,7 @@ route.post("",authorizatsiy(["admin"]), create);
  *       400:
  *         description: Invalid request data
  */
-route.patch("/:id",authorizatsiy(["admin"]), update);
+route.patch("/:id", update);
 
 /**
  * @swagger
@@ -125,6 +125,6 @@ route.patch("/:id",authorizatsiy(["admin"]), update);
  *       401:
  *         description: wrong delete error
  */
-route.delete("/:id",authorizatsiy(["admin"]), remove)
+route.delete("/:id",autentifikatsiya(["admin"]), remove)
 
 export default route

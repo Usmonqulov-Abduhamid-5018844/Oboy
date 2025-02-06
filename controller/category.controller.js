@@ -1,5 +1,4 @@
 import db from '../config/db.js';
-import path from 'path';
 import { categoryPatchValidation, categoryValidation } from '../validations/category.validation.js';
 
 

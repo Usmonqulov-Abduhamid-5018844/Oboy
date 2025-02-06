@@ -11,7 +11,7 @@ import countryRoute from "./country.routes.js"
 
 const mainRoutes = Router();
 
-mainRoutes.use("/", userRoute)
+mainRoutes.use("/user", userRoute)
 mainRoutes.use("/order", orderRoute)
 mainRoutes.use("/product", productRoute)
 mainRoutes.use("/orderItem", orderItemRoute)

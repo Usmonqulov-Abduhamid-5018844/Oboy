@@ -78,13 +78,13 @@ async function register (req,res) {
 };
 async function verify (req,res) {
     try{
-        let {token, phone} = req.params;
+        let {otp, phone} = req.body;
 
         
-        if(!token){
+        if(!otp){
             return res.status(401).json({message: "Not Found otp"})
         }
-        let T = totp.check(token,`${phone}+${Secret}`)
+        let T = totp.check(otp,`${phone}+${Secret}`)
         console.log(T);
         if(!T){
             return res.status(401).json({message: "Wrong OTP"})
