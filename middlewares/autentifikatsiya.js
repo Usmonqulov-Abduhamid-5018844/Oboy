@@ -1,26 +1,25 @@
-import Jwt from "jsonwebtoken";
+import Jwt from "jsonwebtoken"
+import dotenv from "dotenv";
+dotenv.config();
+let Secret = process.env.SECRET
 
-const autentifikatsiya = (roles) => (req, res, next) => {
-    let authHeader = req.header("Authorization");
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "No Found token"});
+const autentifikatsiya = (roles) => (req, res, next)=>{
+    let Token = req.header("Authorization");
+    if(!Token){
+        return res.status(404).json({message: "Not found token"});
     }
-
-    const token = authHeader.split(" ")[1];
-
-    try {
-        let data = Jwt.verify(token, "Secret");
-        if (roles.includes(data.role)) {  
-            req.user = data;
+    try{
+        let data = Jwt.verify(Token, Secret);
+        if(roles.includes(data.role)){  
+            req.user = data
             next();
-        } else {
-            res.status(403).json({ message: "Unauthorized access" });
         }
-    } catch (e) {
-        res.status(401).json({ message: "Invalid token" });
-        console.log("Verification Error:", e.message);
+        else{
+            res.json({message: "No authoraets"})
+        }
+    }catch(e){
+        res.status(401).json({message: e.message})
+        console.log(e.message);
     }
 };
-
-export { autentifikatsiya };
+export {autentifikatsiya};

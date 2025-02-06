@@ -19,20 +19,21 @@ async function login (req,res) {
     try{
         let {phone, password} = req.body;
         const [data] = await db.query("select * from users where phone = ?", phone);
-        
-        
+
         if(!data.length){
             return res.status(401).json({message: "User not fount"});
         }
         let matchPassword = bcrypt.compareSync(password, data[0].password);
+
+        console.log(matchPassword);
         if(!matchPassword){
                 return res.status(401).json({message: "Wrong password"})
             };
-            let token = Jwt.sign({
-                id,
-                role,
-            },Secret)
-            // console.log(token);
+        let token = Jwt.sign({
+            id: data[0].id,
+            role: data[0].role,
+        },Secret)
+        console.log(token);
 
         res.status(200).json({Token: token})
     }catch(e){
@@ -58,18 +59,19 @@ async function register (req,res) {
             return res.json({message: "role faqat user yoki admin bo'lishi kerak"})
         }
         let hash = bcrypt.hashSync(password, 10);
-        password = hash;
+        value.password = hash;
 
         let key = Object.keys(value);
         let valuess = Object.values(value);
         let A = key.join(", ")
         let B = key.map(()=>" ?").join(", ");
 
+
         let query = `insert into users(${A}) value(${B})`
         await db.query(query, valuess);
 
         let OTP = totp.generate(`${phone}+${Secret}`);
-        res.status(200).json({OTP});
+        res.status(200).json({OTP}); 
 
     }catch(e){
         res.status(401).json({message: e.message});
@@ -79,7 +81,6 @@ async function register (req,res) {
 async function verify (req,res) {
     try{
         let {otp, phone} = req.body;
-
         
         if(!otp){
             return res.status(401).json({message: "Not Found otp"})

@@ -13,7 +13,6 @@ async function getAllBrands(req, res) {
         res.json({error: error.message})
     }
 }
-
 async function getBrandById(req, res) {
     try {
         let {id} = req.params

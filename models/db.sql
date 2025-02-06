@@ -63,6 +63,7 @@ CREATE Table categoryItem (
     Foreign Key (category_id) REFERENCES category(id)
 );
 
+
 CREATE TABLE category (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     nameUZ VARCHAR(25),
@@ -83,5 +84,6 @@ ALTER TABLE brand CHANGE logo image VARCHAR(100);
 CREATE TABLE country (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     nameUZ VARCHAR(25),
-    nameRU VARCHAR(25)
+    nameRU VARCHAR(25),
+    image: VARCHAR(20)
 );

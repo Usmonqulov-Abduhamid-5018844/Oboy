@@ -1,9 +1,8 @@
 import db from '../config/db.js';
 import { categoryitemPatchValidation, categoryitemValidation } from '../validations/categoryitem.validation.js';
 
-
-
 async function getAllCategoryItems(req, res) {
+    
     try {
         let [categoryitem] = await db.query("select * from categoryitem")
 
