@@ -25,7 +25,18 @@ async function findOne(req, res) {
     try {
         let {id} = req.params
 
-        let [order] = await db.query("select * from orders where id = ?", [id])
+        let [order] = await db.query(`SELECT 
+            orders.id AS orders_id,
+            orders.id AS order_id,
+            users.fullName AS name,
+            product.nameUZ AS product_name,
+            orderItem.count,
+            orderItem.total
+        FROM orders
+        JOIN users ON orders.user_id = users.id
+        JOIN orderItem ON orders.id = orderItem.order_id
+        JOIN product ON orderItem.product_id = product.id
+        where orders.id = ?;`, [id])
 
         if (!order.length) {
             return res.status(202).json({order: "Order not found !"})

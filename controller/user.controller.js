@@ -24,15 +24,17 @@ async function login (req,res) {
         if(!data.length){
             return res.status(401).json({message: "User not fount"});
         }
+        console.log(data[0].password);
+        console.log(password);
         let matchPassword = bcrypt.compareSync(password, data[0].password);
+        console.log(matchPassword);
         if(!matchPassword){
                 return res.status(401).json({message: "Wrong password"})
             };
-            let token = Jwt.sign({
-                id,
-                role,
-            },Secret)
-            // console.log(token);
+        let token = Jwt.sign({
+            id: data[0].id,
+            role: data[0].role,
+        },Secret)
 
         res.status(200).json({Token: token})
     }catch(e){
@@ -58,7 +60,7 @@ async function register (req,res) {
             return res.json({message: "role faqat user yoki admin bo'lishi kerak"})
         }
         let hash = bcrypt.hashSync(password, 10);
-        password = hash;
+        value.password = hash;
 
         let key = Object.keys(value);
         let valuess = Object.values(value);
@@ -85,7 +87,6 @@ async function verify (req,res) {
             return res.status(401).json({message: "Not Found otp"})
         }
         let T = totp.check(otp,`${phone}+${Secret}`)
-        console.log(T);
         if(!T){
             return res.status(401).json({message: "Wrong OTP"})
         }

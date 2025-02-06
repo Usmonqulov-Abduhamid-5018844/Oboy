@@ -1,11 +1,15 @@
 import db from '../config/db.js';
 import { categoryitemPatchValidation, categoryitemValidation } from '../validations/categoryitem.validation.js';
 
-
-
 async function getAllCategoryItems(req, res) {
     try {
-        let [categoryitem] = await db.query("select * from categoryitem")
+        let [order] = await db.query(`SELECT 
+            product.id AS brand_id,
+            category.id AS country_id,
+            categoryItem.*
+        FROM categoryItem
+        JOIN product ON categoryItem.product_id = product_id
+        JOIN category ON categoryItem.category_id = category.id;`)
 
         res.status(202).json({categoryitem})
         
@@ -18,7 +22,15 @@ async function getCategoryItemById(req, res) {
     try {
         let {id} = req.params
 
-        let [categoryitem] = await db.query("select * from categoryitem where id = ?", [id])
+        let [order] = await db.query(`SELECT 
+            categoryItem.id AS categoryItem_id,
+            product.id AS brand_id,
+            category.id AS country_id,
+            categoryItem.*
+        FROM categoryItem
+        JOIN product ON categoryItem.product_id = product_id
+        JOIN category ON categoryItem.category_id = category.id
+        WHERE categoryItem.id = ?;`, [id])
 
         if (!categoryitem.length) {
             return res.status(202).json({categoryitem: "categoryitem not found !"})

@@ -3,7 +3,13 @@ import {ProductPatchValidation, ProductValidation } from "../validations/product
 
 async function findAll(req, res) {
     try {
-        let [order] = await db.query("select * from product")
+        let [order] = await db.query(`SELECT 
+            brand.id AS brand_id,
+            country.id AS country_id,
+            product.*
+        FROM product
+        JOIN brand ON product.brand_id = brand.id
+        JOIN country ON product.country_id = country.id;`)
 
         res.status(202).json({order})     
     } catch (error) {
@@ -13,7 +19,16 @@ async function findAll(req, res) {
 async function findOne(req, res) {
     try {
         let {id} = req.params
-        let [order] = await db.query("select * from product where id = ?", [id])
+        let [order] = await db.query(`SELECT 
+            product.id AS product_id,
+            brand.id AS brand_id,
+            country.id AS country_id,
+            product.*
+        FROM product
+        JOIN brand ON product.brand_id = brand.id
+        JOIN country ON product.country_id = country.id
+        where product.id = ?;`, [id])
+
         if (!order.length) {
             return res.status(202).json({order: "Product not found !"})         
         }

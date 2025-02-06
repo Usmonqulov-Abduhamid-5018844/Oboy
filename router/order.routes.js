@@ -76,7 +76,7 @@ route.get("/:id", findOne);
  *       400:
  *         description: Invalid request data
  */
-route.post("", create);
+route.post("", autentifikatsiya(["admin"]), create);
 
 /**
  * @swagger
@@ -102,7 +102,7 @@ route.post("", create);
  *       400:
  *         description: Invalid request data
  */
-route.patch("/:id", update);
+route.patch("/:id", autentifikatsiya, update);
 
 /**
  * @swagger

@@ -3,7 +3,17 @@ import {OrderItemPatchValidation, OrderItemValidation, } from "../validations/or
 
 async function findAll(req, res) {
     try {
-        let [order] = await db.query("select * from orderitem")
+        let [order] = await db.query(`SELECT 
+    orders.id AS order_id,
+    product.id AS product_id,
+    product.nameUZ AS Product_Name_UZ,
+    product.price AS Product_Price,
+    product.descriptionUZ AS product_description_uz,
+    product.washable AS product_washable,
+    product.size AS product_size
+FROM orderItem
+JOIN orders ON orderItem.order_id = orders.id
+JOIN product ON orderItem.product_id = product.id;`)
 
         res.status(202).json({order})
     } catch (error) {
@@ -14,7 +24,19 @@ async function findOne(req, res) {
     try {
         let {id} = req.params
 
-        let [order] = await db.query("select * from orderitem where id = ?", [id])
+        let [order] = await db.query(`SELECT 
+            orderItem.id AS order_item_id,
+            orders.id AS order_id,
+            product.id AS product_id,
+            product.nameUZ AS Product_Name_UZ,
+            product.price AS Product_Price,
+            product.descriptionUZ AS product_description_uz,
+            product.washable AS product_washable,
+            product.size AS product_size
+        FROM orderItem
+        JOIN orders ON orderItem.order_id = orders.id
+        JOIN product ON orderItem.product_id = product.id
+        where orderitem.id = ?;`, [id])
 
         if (!order.length) {
             return res.status(202).json({order: "Order not found !"})       
