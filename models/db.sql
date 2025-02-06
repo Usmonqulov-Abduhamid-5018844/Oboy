@@ -130,7 +130,8 @@ ALTER TABLE brand CHANGE logo image VARCHAR(100);
 CREATE TABLE country (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     nameUZ VARCHAR(25),
-    nameRU VARCHAR(25)
+    nameRU VARCHAR(25),
+    image: VARCHAR(20)
 );
 
 /* 

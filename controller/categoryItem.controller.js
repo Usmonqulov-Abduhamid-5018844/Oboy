@@ -2,6 +2,7 @@ import db from '../config/db.js';
 import { categoryitemPatchValidation, categoryitemValidation } from '../validations/categoryitem.validation.js';
 
 async function getAllCategoryItems(req, res) {
+    
     try {
         let [order] = await db.query(`SELECT 
             product.id AS brand_id,

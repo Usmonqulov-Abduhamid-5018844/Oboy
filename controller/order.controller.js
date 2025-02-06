@@ -51,11 +51,14 @@ async function findOne(req, res) {
 
 async function create(req, res) {
     try {
+        console.log("user_id, totalPrice");
         let {error, value} = OrderValidation.validate(req.body)
         if (error) {
             return res.status(401).json({error: error.details[0].message})
         }
         let {user_id, totalPrice} = value
+
+        
 
         console.log(user_id, totalPrice);    
         let [user] = await db.query("insert into orders(user_id, totalPrice) values (?, ?)", [user_id, totalPrice])
