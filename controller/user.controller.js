@@ -12,7 +12,54 @@ async function all (req,res) {
     if(!data.length){
         return res.status(401).json({message: "Users not fount"});
     }
-    res.status(200).json(data[0])
+    
+
+    if (Object.keys(req.query).length === 0) {
+        res.status(201).json({data})
+    }else{
+        let keys = Object.keys(req.query)
+        let value = Object.values(req.query)
+
+        let queryKey = keys.map((p)=> (p += " = ?"))
+        let queryValues = value.map((p)=> (p += ""))
+
+        let user = []
+        for (let i = 0; i < keys.length; i++) {
+
+            keys[i] = keys[i].toLowerCase()
+            
+            if (keys[i] === "fullname" || keys[i] === "phone" || keys[i] === "role") {
+                let [users] = await db.query(`select * from users where ${queryKey.join(" AND ")}`,[...queryValues])   
+                user.push(users)
+            }
+        }
+
+        if (keys[0] === "page" || keys[1] === "take") {
+            
+            let page = parseInt(req.query.page) || 1
+            let take = parseInt(req.query.take) || 10
+
+            let offset = (page - 1) * take; 
+
+            try {
+                let [users] = await db.query(`SELECT * FROM users LIMIT ? OFFSET ?`, [take, offset]);
+                return res.status(200).json({ page, take, users });
+            } catch (error) {
+                return res.status(500).json({ error: "Server xatosi" });
+            }
+        }
+
+            user = user.flat()
+            if (!user.length) {
+                return res.status(401).json({user: "Data not Found"})
+            }
+
+            res.status(201).json({user})
+                
+    }
+    
+
+    
 };
 
 async function login (req,res) {

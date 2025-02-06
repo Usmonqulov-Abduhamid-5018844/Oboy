@@ -25,8 +25,8 @@ SELECT
     orderItem.total
 FROM orders
 JOIN users ON orders.user_id = users.id
-JOIN orderItem ON orders.id = orderItem.order_id
-JOIN product ON orderItem.product_id = product.id;
+LEFT JOIN orderItem ON orders.id = orderItem.order_id
+LEFT JOIN product ON orderItem.product_id = product.id;
 
 CREATE Table orderItem (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
