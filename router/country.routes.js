@@ -2,6 +2,7 @@ import {Router} from 'express';
 import {createCountry,deleteCountry,getAllCountries,getCountryById,updateCountry} from '../controller/country.controller.js';
 // import authorizatsiy from "../middlewares/authorizatsiya.js";
 import {autentifikatsiya} from "../middlewares/autentifikatsiya.js";
+import { Authorization } from '../middlewares/authorizatsya.js';
 
 let router = Router()
 
@@ -49,7 +50,7 @@ router.get('/', getAllCountries);
  *       403:
  *         description: Malumot Topilmadi
  */
-router.get('/:id', getCountryById);
+router.get('/:id',Authorization, getCountryById);
 
 /**
  * @swagger
@@ -79,7 +80,7 @@ router.get('/:id', getCountryById);
  *       400:
  *         description: Invalid request data
  */
-router.post('/', createCountry);
+router.post('/',autentifikatsiya(["admin"]), createCountry);
 
 
 /**

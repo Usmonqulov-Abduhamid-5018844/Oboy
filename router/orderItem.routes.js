@@ -2,6 +2,7 @@ import {create, findAll, findOne, remove, update} from "../controller/orderItem.
 import {Router} from "express"
 // import authorizatsiy from "../middlewares/authorizatsiya.js"
 import {autentifikatsiya} from "../middlewares/autentifikatsiya.js";
+import { Authorization } from "../middlewares/authorizatsya.js";
 
 let route = Router()
 
@@ -24,7 +25,7 @@ let route = Router()
  *       400:
  *         description: Invalid request data
  */
-route.get("", findAll);
+route.get("/", findAll);
 
 /**
  * @swagger
@@ -47,7 +48,7 @@ route.get("", findAll);
  *       403:
  *         description: Malumot Topilmadi
  */
-route.get("/:id", findOne);
+route.get("/:id",Authorization, findOne);
 
 /**
  * @swagger
@@ -85,7 +86,7 @@ route.get("/:id", findOne);
  *       400:
  *         description: Invalid request data
  */
-route.post("", create);
+route.post("/",autentifikatsiya(["admin"]), create);
 
 /**
  * @swagger

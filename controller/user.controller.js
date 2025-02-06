@@ -13,7 +13,6 @@ async function all (req,res) {
         return res.status(401).json({message: "Users not fount"});
     }
     
-
     if (Object.keys(req.query).length === 0) {
         res.status(201).json({data})
     }else{
@@ -133,6 +132,7 @@ async function verify (req,res) {
             return res.status(401).json({message: "Not Found otp"})
         }
         let T = totp.check(otp,`${phone}+${Secret}`)
+        console.log(T);
         if(!T){
             return res.status(401).json({message: "Wrong OTP"})
         }

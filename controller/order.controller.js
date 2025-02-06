@@ -24,7 +24,6 @@ async function findAll(req, res) {
 
             let key = Object.keys(req.query)
             let value = Object.values(req.query)
-            // let queryKey = key.map((p)=>(p += " = ?"))
             let queryKey = key.map((p)=>( "orders.".concat(p += " = ?")))
             let product = []
 

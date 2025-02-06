@@ -70,7 +70,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5500",
+        url: "http://localhost:5000",
       },
     ],
     components: {
@@ -89,7 +89,7 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
-let Port = process.env.PORT || 4000
+let Port = process.env.PORT
 
 const app = express();
 app.use(express.json());
