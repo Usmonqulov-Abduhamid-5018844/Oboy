@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import {createCategoryItem,deleteCategoryItem,getAllCategoryItems,getCategoryItemById,updateCategoryItem} from '../controller/categoryItem.controller.js';
-// import authorizatsiy from "../middlewares/authorizatsiya.js";
 import {autentifikatsiya} from "../middlewares/autentifikatsiya.js";
+import { Authorization } from '../middlewares/authorizatsya.js';
 
 let router = Router()
 
@@ -49,7 +49,7 @@ router.get('/', getAllCategoryItems);
  *       403:
  *         description: Malumot Topilmadi
  */
-router.get('/:id', getCategoryItemById);
+router.get('/:id',Authorization, getCategoryItemById);
 
 /**
  * @swagger
@@ -87,7 +87,7 @@ router.get('/:id', getCategoryItemById);
  *       400:
  *         description: Invalid request data
  */
-router.post('/', createCategoryItem);
+router.post('/',autentifikatsiya(["admin"]), createCategoryItem);
 
 
 /**

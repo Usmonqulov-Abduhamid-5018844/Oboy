@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { createBrand, deleteBrand, getAllBrands, getBrandById, updateBrand } from '../controller/brand.controller.js';
-import upload from "../multer/brand.js"
+import upload from "../multer/file.js"
 import {autentifikatsiya} from "../middlewares/autentifikatsiya.js";
+import { Authorization } from '../middlewares/authorizatsya.js';
 
 const router = Router();
 
@@ -48,7 +49,7 @@ router.get('/', getAllBrands);
  *       403:
  *         description: Malumot Topilmadi
  */
-router.get('/:id', getBrandById);
+router.get('/:id',Authorization, getBrandById);
 
 
 /**

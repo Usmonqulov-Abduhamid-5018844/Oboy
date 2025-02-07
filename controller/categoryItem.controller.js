@@ -3,8 +3,13 @@ import { categoryitemPatchValidation, categoryitemValidation } from '../validati
 
 async function getAllCategoryItems(req, res) {
     
-    try {
-        let [order] = await db.query(`SELECT 
+    try{
+        const [data] = await db.query("select * from category");
+        if(!data.length){
+            return res.status(401).json({message: "category not fount"});
+        }
+        if (Object.keys(req.query).length === 0) {
+            let [order] = await db.query(`SELECT 
             product.id AS brand_id,
             category.id AS country_id,
             categoryItem.*
@@ -12,10 +17,48 @@ async function getAllCategoryItems(req, res) {
         JOIN product ON categoryItem.product_id = product_id
         JOIN category ON categoryItem.category_id = category.id;`)
 
-        res.status(202).json({categoryitem})
-        
-    } catch (error) {
-        res.json({error: error.message})
+        res.status(201).json({order})
+        }else{
+            let keys = Object.keys(req.query)
+            let value = Object.values(req.query)
+    
+            let queryKey = keys.map((p)=> (p += " = ?"))
+            let queryValues = value.map((p)=> (p += ""))
+    
+            let categoryitem = []
+            for (let i = 0; i < keys.length; i++) {
+    
+                keys[i] = keys[i].toLowerCase()
+                
+                if (keys[i] === "category_id" || keys[i] === "product_id") {
+                    let [categoryitems] = await db.query(`select * from categoryitem where ${queryKey.join(" AND ")}`,[...queryValues])   
+                    categoryitem.push(categoryitems)
+                }
+            }
+    
+            if (keys[0] === "page" || keys[1] === "take") {
+                
+                let page = parseInt(req.query.page) || 1
+                let take = parseInt(req.query.take) || 10
+    
+                let offset = (page - 1) * take; 
+    
+                try {
+                    let [categoryitems] = await db.query(`SELECT * FROM categoryitem LIMIT ? OFFSET ?`, [take, offset]);
+                    return res.status(200).json({ page, take, categoryitems });
+                } catch (error) {
+                    return res.status(500).json({ error: "Server xatosi" });
+                }
+            }
+            categoryitem = categoryitem.flat()
+                if (!categoryitem.length) {
+                    return res.status(401).json({categoryitem: "Data not Found"})
+                }
+             res.status(201).json({categoryitem})               
+        }    
+    }catch(e){
+        res.status(401).json({message: e.message})
+        console.log(e);
     }
 }
 

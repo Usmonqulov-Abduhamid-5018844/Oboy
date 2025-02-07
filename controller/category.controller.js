@@ -4,13 +4,55 @@ import { categoryPatchValidation, categoryValidation } from '../validations/cate
 
 
 async function getAllCategories(req, res) {
-    try {
-        let [category] = await db.query("select * from category")
-
-        res.status(202).json({category})
+    try{
+        const [data] = await db.query("select * from category");
+        if(!data.length){
+            return res.status(401).json({message: "category not fount"});
+        }
         
-    } catch (error) {
-        res.json({error: error.message})
+        if (Object.keys(req.query).length === 0) {
+            res.status(201).json({data})
+        }else{
+            let keys = Object.keys(req.query)
+            let value = Object.values(req.query)
+    
+            let queryKey = keys.map((p)=> (p += " = ?"))
+            let queryValues = value.map((p)=> (p += ""))
+    
+            let category = []
+            for (let i = 0; i < keys.length; i++) {
+    
+                keys[i] = keys[i].toLowerCase()
+                
+                if (keys[i] === "nameUZ" || keys[i] === "nameRU" || keys[i] === "image") {
+                    let [categorys] = await db.query(`select * from category where ${queryKey.join(" AND ")}`,[...queryValues])   
+                    category.push(categorys)
+                }
+            }
+    
+            if (keys[0] === "page" || keys[1] === "take") {
+                
+                let page = parseInt(req.query.page) || 1
+                let take = parseInt(req.query.take) || 10
+    
+                let offset = (page - 1) * take; 
+    
+                try {
+                    let [categorys] = await db.query(`SELECT * FROM category LIMIT ? OFFSET ?`, [take, offset]);
+                    return res.status(200).json({ page, take, categorys });
+                } catch (error) {
+                    return res.status(500).json({ error: "Server xatosi" });
+                }
+            }
+            category = category.flat()
+                if (!category.length) {
+                    return res.status(401).json({category: "Data not Found"})
+                }
+             res.status(201).json({category})               
+        }    
+    }catch(e){
+        res.status(401).json({message: e.message})
+        console.log(e);
     }
 }
 
@@ -37,7 +79,8 @@ async function createCategory(req, res) {
         if (error) {
             return res.status(401).json({error: error.details[0].message})
         }
-        let {nameUZ, nameRU, image} = value
+        let {nameUZ, nameRU} = value
+        let image = req.file.filename
 
         console.log(nameUZ, nameRU, image);    
         let [user] = await db.query("insert into category(nameUZ, nameRU, image) values (?, ?, ?)", [nameUZ, nameRU, image])

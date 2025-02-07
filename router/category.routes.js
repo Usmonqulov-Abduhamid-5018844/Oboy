@@ -1,7 +1,8 @@
 import {Router} from 'express';
 import {createCategory,deleteCategory,getAllCategories,getCategoryById,updateCategory} from '../controller/category.controller.js';
-import upload  from '../multer/brand.js';
+import upload  from '../multer/file.js';
 import {autentifikatsiya} from "../middlewares/autentifikatsiya.js";
+import { Authorization } from '../middlewares/authorizatsya.js';
 
 let router = Router()
 
@@ -49,7 +50,7 @@ router.get('/', getAllCategories);
  *       403:
  *         description: Malumot Topilmadi
  */
-router.get('/:id', getCategoryById);
+router.get('/:id',Authorization, getCategoryById);
 
 
 /**
