@@ -1,4 +1,4 @@
-import {create, findAll, findOne, remove, update} from "../controller/order.controller.js"
+import {create, findAll, findOne } from "../controller/order.controller.js"
 import {Router} from "express"
 import {autentifikatsiya} from "../middlewares/autentifikatsiya.js";
 
@@ -77,54 +77,5 @@ route.get("/:id", findOne);
  *         description: Invalid request data
  */
 route.post("", autentifikatsiya(["admin"]), create);
-
-/**
- * @swagger
- * /api/order/{id}:
- *   patch:
- *     summary: Order id
- *     tags: [Order]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             properties:
- *               user_id:
- *                 type: integer
- *                 example: 4
- *               totalprice:
- *                 type: integer
- *                 example: 25000
- *     responses:
- *       201:
- *         description: Created successfully
- *       400:
- *         description: Invalid request data
- */
-route.patch("/:id", autentifikatsiya, update);
-
-/**
- * @swagger
- * /api/order/{id}:
- *   delete:
- *     summary: Get one Order
- *     tags: [Order]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: Order ID
- *     responses:
- *       200:
- *         description: delete
- *       401:
- *         description: wrong delete error
- */
-route.delete("/:id",autentifikatsiya(["admin"]), remove)
 
 export default route
