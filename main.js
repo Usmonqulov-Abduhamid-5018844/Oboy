@@ -18,7 +18,7 @@ import swaggerUi from "swagger-ui-express";
 //       servers: [
 //         {
           
-//           url: "http://localhost:5000",
+//           url: "http://localhost:5500",
 //         },
 //       ],
 //     },
@@ -57,7 +57,7 @@ import swaggerUi from "swagger-ui-express";
  *                   example: "your_jwt_token"
  *                 expires_in:
  *                   type: integer
- *                   example: 3600
+ *                   example: 5500
  */
 
 const options = {
@@ -70,7 +70,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: "http://localhost:5500",
       },
     ],
     components: {
