@@ -47,7 +47,7 @@ async function getAllBrands(req, res) {
                 if (!brand.length) {
                     return res.status(401).json({brand: "Data not Found"})
                 }
-             res.status(201).json({brand})               
+            res.status(201).json({brand})               
         }    
     }catch(e){
         res.status(401).json({message: e.message})

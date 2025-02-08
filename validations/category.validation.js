@@ -4,6 +4,7 @@ const categoryValidation =  joi.object({
     nameUZ: joi.string().required(),
     nameRU: joi.string().required(),
     image: joi.string(),
+    categriy_id: joi.any()
 })
 
 const categoryPatchValidation =  joi.object({

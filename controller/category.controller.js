@@ -1,8 +1,6 @@
 import db from '../config/db.js';
 import { categoryPatchValidation, categoryValidation } from '../validations/category.validation.js';
 
-
-
 async function getAllCategories(req, res) {
     try{
         const [data] = await db.query("select * from category");
@@ -48,7 +46,7 @@ async function getAllCategories(req, res) {
                 if (!category.length) {
                     return res.status(401).json({category: "Data not Found"})
                 }
-             res.status(201).json({category})               
+            res.status(201).json({category})               
         }    
     }catch(e){
         res.status(401).json({message: e.message})
@@ -79,17 +77,24 @@ async function createCategory(req, res) {
         if (error) {
             return res.status(401).json({error: error.details[0].message})
         }
-        let {nameUZ, nameRU} = value
-        let image = req.file.filename
+        let {nameUZ, nameRU, image, categriy_id} = value
+        let images = req.file ? { filename: req.file.filename } : { filename: image };
 
-        console.log(nameUZ, nameRU, image);    
-        let [user] = await db.query("insert into category(nameUZ, nameRU, image) values (?, ?, ?)", [nameUZ, nameRU, image])
-        if(user.affectedRows == 1){
-            res.json({data:"Created"})
+        let [category] = await db.query("insert into category(nameUZ, nameRU, image) values (?, ?, ?)", [nameUZ, nameRU, image])
+
+        console.log(category);
+        
+        categriy_id.forEach(async element => {
+            let [categoryItem] = await db.query("insert into categoryitem(category_id, product_id) values (?, ?)", [category.insertId, element.product_id])
+
+        });
+        if(category.affectedRows == 1){
+            return res.json({data:"Created"})
         }
         else{
-            res.json({message: "Bazaga saqlashda xatolig"})
+            return res.json({message: "Bazaga saqlashda xatolig"})
         }
+
     } catch (error) {
         res.json({error: error.message})
     }

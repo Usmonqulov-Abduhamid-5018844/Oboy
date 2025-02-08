@@ -50,7 +50,7 @@ async function findAll(req, res) {
                     return res.status(201).json({prods})
                 }
             }
-            
+
             if (key[0] === "page" || key[1] === "take") {
                 let page = parseInt(value[0]) || 1
                 let take = parseInt(value[1]) || 10

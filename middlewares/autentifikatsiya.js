@@ -11,7 +11,7 @@ const autentifikatsiya = (roles) => (req, res, next)=>{
     
     try{
         let data = Jwt.verify(Token, Secret);
-        console.log(data);
+        // console.log(data);
         if(roles.includes(data.role)){  
             req.user = data
             next();

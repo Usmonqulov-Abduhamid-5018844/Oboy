@@ -15,7 +15,7 @@ const Authorization = (req, res, next)=>{
             next();
     }catch(e){
         res.status(401).json({message: e.message})
-        console.log(e.message);
+        // console.log(e.message);
     }
 };
 export {Authorization};

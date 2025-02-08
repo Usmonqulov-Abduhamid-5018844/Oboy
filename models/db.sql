@@ -247,3 +247,17 @@ VALUES
 (8, 260000),  -- 8-id foydalanuvchi uchun buyurtma
 (9, 230000),  -- 9-id foydalanuvchi uchun buyurtma
 (10, 240000);  -- 10-id foydalanuvchi uchun buyurtma */
+
+
+SELECT 
+    orders.id AS order_id,
+    orders.user_id AS User_id,
+    users.fullName AS User_name,
+    product.nameUZ AS product_name,
+    orders.totalPrice AS Total_Price,
+    orderItem.count,
+    orderItem.total
+FROM orders
+JOIN users ON orders.user_id = users.id
+LEFT JOIN orderItem ON orders.id = orderItem.order_id
+LEFT JOIN product ON orderItem.product_id = product.id;
