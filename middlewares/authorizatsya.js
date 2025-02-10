@@ -11,11 +11,10 @@ const Authorization = (req, res, next)=>{
     
     try{
         let data = Jwt.verify(Token, Secret);
-            req.user = data
-            next();
+        req.user = data
+        next();
     }catch(e){
         res.status(401).json({message: e.message})
-        // console.log(e.message);
     }
 };
 export {Authorization};

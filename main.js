@@ -5,26 +5,6 @@ import mainRoutes from "./router/index.js"
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-
-// const options = {
-//     definition: {
-//       openapi: "3.1.0",
-//       info: {
-//         title: "Oboy shop",
-//         version: "0.1.0",
-//         description:
-//           "This is a simple CRUD API application made with Express and documented with Swagger",
-//       },
-//       servers: [
-//         {
-          
-//           url: "http://localhost:5500",
-//         },
-//       ],
-//     },
-//     apis: ["./router/*.js"],
-//   };
-
 /**
  * @swagger
  * /api:
@@ -70,7 +50,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5500",
+        url: "http://13.232.45.220:5500",
       },
     ],
     components: {
